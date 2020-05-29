@@ -1,0 +1,29 @@
+Object类
+       * `public String toString()`：返回该对象的字符串表示。
+       * `public boolean equals(Object obj)`：指示其他某个对象是否与此对象“相等”。
+
+Date类
+        - `public Date()`：分配Date对象并初始化此对象，以表示分配它的时间（精确到毫秒）。
+        - `public Date(long date)`：分配Date对象并初始化此对象，以表示自从标准基准时间（称为“历元（epoch）”，
+        即1970年1月1日00:00:00 GMT）以来的指定毫秒数。
+        `public long getTime()` 把日期对象转换成对应的时间毫秒值。
+DateFormat类
+        `public SimpleDateFormat(String pattern)`：
+        用给定的模式和默认语言环境的日期格式符号构造SimpleDateFormat。
+        - `public String format(Date date)`：将Date对象格式化为字符串。
+        - `public Date parse(String source)`：将字符串解析为Date对象。
+Calendar类
+        `public static Calendar getInstance()`：使用默认时区和语言环境获得一个日历
+        - `public int get(int field)`：返回给定日历字段的值。
+        - `public void set(int field, int value)`：将给定的日历字段设置为给定值。
+        - `public abstract void add(int field, int amount)`：根据日历的规则，为给定的日历字段添加或减去指定的时间量。
+        - `public Date getTime()`：返回一个表示此Calendar时间值（从历元到现在的毫秒偏移量）的Date对象。
+System类
+        - `public static long currentTimeMillis()`：返回以毫秒为单位的当前时间。
+        - `public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)`：
+        将数组中指定的数据拷贝到另一个数组中。
+StringBuilder类
+            - `public StringBuilder()`：构造一个空的StringBuilder容器。
+            - `public StringBuilder(String str)`：构造一个StringBuilder容器，并将字符串添加进去。
+            - `public StringBuilder append(...)`：添加任意类型数据的字符串形式，并返回当前对象自身。
+            - `public String toString()`：将当前StringBuilder对象转换为String对象。

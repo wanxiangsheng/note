@@ -1,0 +1,70 @@
+MySQL
+    数据库的卸载
+        删除 c 盘 ProgramDate 目录中关于 MySQL 的目录
+     具体操作：
+            -- 直接创建数据库 db1
+            create database db1;
+            -- 判断是否存在，如果不存在则创建数据库 db2
+            create database if not exists db2;
+            -- 创建数据库并指定字符集为 gbk
+            create database db3 default character set gbk;
+     查看数据库
+            -- 查看所有的数据库
+            show databases;
+            -- 查看某个数据库的定义信息
+            show create database db3;
+            show create database db1;
+     修改数据库默认的字符集
+            alter database db3 character set utf8;
+     删除数据库
+            drop database db2;
+      使用数据库
+            -- 查看正在使用的数据库
+            select database();
+            -- 改变要使用的数据库
+            use db4;
+      将 student2 表的编码修改成 gbk
+             alter table student2 character set gbk;
+       插入部分数据
+            insert into student (id,name,age,sex) values (1, '孙悟空', 20, '男');
+            insert into student (id,name,age,sex) values (2, '孙悟天', 16, '男');
+        向表中插入所有字段
+                -- 插入所有列
+                insert into student values (3, '孙悟饭', 18, '男', '龟仙人洞中');
+                -- 如果只插入部分列，必须写列名
+                insert into student values (3, '孙悟饭', 18, '男');
+                select * from student;
+         外键约束：foreign key,让表于表产生关系，从而保证数据的正确性
+            1. 在创建表时，可以添加外键
+            		* 语法：
+            			create table 表名(
+            				....
+            				外键列
+            				constraint 外键名称 foreign key (外键列名称) references 主表名称(主表列名称)
+            			);
+
+            	2. 删除外键
+            		ALTER TABLE 表名 DROP FOREIGN KEY 外键名称;
+
+            	3. 创建表之后，添加外键
+            		ALTER TABLE 表名 ADD CONSTRAINT 外键名称 FOREIGN KEY (外键字段名称) REFERENCES 主表名称(主表列名称);
+          数据库设计的范式
+                    第一范式（1NF）：每一列都是不可分割的原子数据项
+                    		2. 第二范式（2NF）：在1NF的基础上，非码属性必须完全依赖于码（在1NF基础上消除非主属性对主码的部分函数依赖）
+                    函数依赖
+                    完全函数依赖
+                    部分函数依赖
+                    传递函数依赖
+                    码  一个属性或属性组，被其他所有属性所完全依赖
+           数据库的备份和还原
+                    mysqldump -u用户名 -p密码 数据库名称 > 保存的路径
+                   还原：
+                   			1. 登录数据库
+                   			2. 创建数据库
+                   			3. 使用数据库
+                   			4. 执行文件。source 文件路径
+            事务的四大特性 ACID
+                    原子性（Atomicity ）
+                    一致性（Consistency ）
+                    隔离性（Isolation ）
+                    持久性（Durability ）

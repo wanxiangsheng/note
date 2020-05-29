@@ -1,0 +1,26 @@
+spring:
+  耦合
+      程序间的依赖关系
+       我们应该做到  编译器不依赖 运行时才依赖
+       解耦  就是降低程序间的依赖关系
+        思路： 1 通过反射来创建对象，避免new关键字
+               2  通过配置文件读取全限定类名
+
+       工厂模式的出现 就是为了解耦
+            public Object beanFactory(String beanName){
+                  1  Object bean
+                  2  编写配置文件 （如：  accout = cn.itcast.dao.impl.accountDaoImpl）
+                  3  读取配置文件
+                           new properties 对象  返回pro
+                            beanfactory.class.getclassloader.getsourceAsstream("配置文件")  返回inputstream  in
+                            pro.load(in)
+
+                    beanpath = pro.getproperty(beanName)
+                      再用  class.forName(beanpath).newinstance()    赋值bean
+
+                  return bean;
+            }
+
+        IOC 控制反转
+                本来可以new一个实现类  有完全的独立自主权   将这个权力给了工厂  让工厂根据特定的名称 读取文件配置 获取全限定类名
+                控制权发生了转移  帮我们创建对象 降低程序间的依赖关系 削减程序间的耦合

@@ -1,0 +1,29 @@
+Scanner类
+        Scanner sc = new Scanner(System.in);
+        查看构造方法
+        public Scanner(InputStream source) :
+        构造一个新的  Scanner ，它生成的值是从指定的输入流扫描的。
+        int i = sc.nextInt(); // 接收一个键盘录入的整数
+匿名对象
+        new Scanner(System.in)；
+Random类
+        Random r = new Random();
+         public int nextInt(int n)
+ArrayList类
+        是大小可变的数组的实现
+        public boolean add(E e) ：将指定的元素添加到此集合的尾部。
+        public E remove(int index) ：移除此集合中指定位置上的元素。返回被删除的元素。
+        public E get(int index) ：返回此集合中指定位置上的元素。返回获取的元素。
+        public int size() ：返回此集合中的元素数。遍历集合时，可以控制索引范围，防止越界。
+        存储基本数据类型
+                    ArrayList对象不能存储基本类型，只能存储引用类型的数据。类似 <int> 不能写，但是存储基本数据类型对应的
+                    包装类型是可以的
+                    基本类型 基本类型包装类
+                    byte Byte
+                    short Short
+                    int Integer
+                    long Long
+                    float Float
+                    double Double
+                    char Character
+                    boolean Boolean

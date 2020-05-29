@@ -1,0 +1,110 @@
+mybatis:
+  1 配置
+        创建maven项目
+            注意在setting中搜索maven   配置maven的路径  配置本地仓库  如果要先调用本地仓库 在running  vm-option 中加
+            -DarchetypeCatalog=internal
+
+             创建结束后
+                    1 首先要配置pom文件 设置 package为 jar包     4个文件  mysql驱动
+                                                mybatis框架
+                                                 junit测试
+                                                 log4j日志
+                    2 在resource 文件夹下创建 SqlMapConfig
+                                            导入约束文件
+                                             写configration 里面的environments  default 为mysql
+                                                                    environment id 为mysql
+                                                                    tranactionManager  为 JDBC
+                                                                    datasource pooled  里面有 4 个property
+                                                                                        driver  com.mysql.jdbc.Driver
+                                                                                        url    jdbc:mysql///数据库
+                                                                                        username  root
+                                                                                        password  root
+                      然后在创建mappers 标签
+                            在创建mapper  属性resource 为userDao 的全目录下的userDao.xml
+
+                     3在userDao的同级目录下  创建userDao.xml  引入约束
+                                mapper  属性为 namespace 为 userDao的全限定名
+                                    还有select标签  id为userDao的方法  将查询结果封装返回的类型 resulttype  写 User对象的全限定名
+                                    在select标签中添加sql语句
+
+
+            crud:
+                先定义userDao 中的方法  确定返回值类型
+                  然后修改配置文件 映射userDao的是实例   save  insert语句 id对应方法  paramater 对应传入参数的类型 result-set 对应 返回的类型  （用全限定类名）
+                  然后写sql语句       保存方法若要返回id 则设置selectkey   keyproperty 属性名  column 数据库对应的列名  resulttype  int   order after
+
+                  若类的属性名跟数据库字段名不对应  修改方法  1：sql语句起别名
+                                                          2：设置resultMap   id 为userMap  type 为 类的全限定名
+                                                          主键字段  <id property = "userID"  columen="id">
+                                                           非主键   <result property=   columen  = >
+                                                            再修改对应语句的 resluttype为 useMap
+
+              SqlMapConfig优化
+                    1 properties 标签  resource   引入资源  jdbcconfig.properties
+                            然后就可以在 datasource 中 的property  用${配置文件的字段} 来获取值
+                    2 url  引入资源
+
+                    3 typealias  标签  type  类的全限定名   alias  别名    然后就可以在下面的 限定名替换成别名
+                            还可以用package标签  直接写包名
+                    4   mapper 标签中的 package  name 引用dao接口的目录  然后可以自动识别所有的到接口
+
+             userDao.xml
+                          select * from user where 1=1
+                        <if text = "username != null">   username 代表传入的参数
+                            and where username= #{username}
+                        </if>
+
+                        <where>   标签 不用写 where 1=1
+
+                        <foreach> 标签  collection ids  open + sql拼接语句   close +） item =id  sperator = ,
+                                        #{id}    id 为item的值
+
+               如何在类中的属性封装属性值
+                        一对一
+                        在dao接口对应的xml文件中 配置 resultMap id 取名称 type 返回类型
+                        <resultMap>
+                        <id property 属性名 columen 数据库字段 ></id>
+                                                                <result> ...
+                          assocation property 属性名 column 对应的数据库字段  如uid  javatype  返回值
+                          <id>...
+                          <result>....
+                         <resultMap>
+                        一对多
+                         1 resultMap
+                         2 <id>
+                            <result property column>
+                         3 <collection property oftype 集合中的类型>
+                                <id>
+                                <result column property>
+
+                        多对多
+                              1 定义属性
+                              2 xml配置   resultMap 配置id  随便取 type 返回值类型
+                              3  <id property column>  <result>
+                               4 映射  collection  property 属性  oftype 返回类型
+                                    <id  property 属性 column 对应数据库中的字段>
+                                    <result>
+
+
+                        延迟加载：  sql语句写一半  在用select标签  调用其他dao里面的方法  设置setting里面的两个属性  参考mybatis官网  一个设置true  一个设置false
+
+                         sqlsession  一级缓存  两次查找同一id  返回的对象一样   调的缓存
+                         sqlsessionfactory 二级缓存
+                                    1 sqlMapconfig  加入setting 标签  设置cacheenabled
+                                    2 userDao.xml   写入<cache /> 标签
+                                    3  select 标签 方法中  加入usercache
+                        注解开发
+                                1  在dao接口上的方法直接加 @select（sql语句）
+                                2 为了解决属性名跟数据库字段不对应  用
+                                            @results ( id  随便起  如userMap  value={
+                                                    @result (id =true property 属性 column 字段)
+                                                    @result( property  column)
+                                            })
+                                           要引用的话 就 直接加@resultMap( "上面的名称"  )  正规的写法 @resultMap(value={"名称"})
+                                 3  一对多查询
+                                    @result 后面跟
+                                            @result( property =user ,column uid, one =@one(select ="方法的全限定类名"，fetchtype = Fetchtype.lazy))
+                                   4 二级缓存
+                                            在dao接口上 加
+                                            @cacheNamespace (block = true)
+

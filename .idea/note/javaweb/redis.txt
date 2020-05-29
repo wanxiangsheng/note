@@ -1,0 +1,149 @@
+redis : 非关系型数据库
+
+ nosql  存在内存中
+
+ 键值对存储  打开server  打开client
+  设置值  set name zhangsan
+  取值    get name
+
+  数据结构：
+        key value
+        key 都是字符串
+        value 5种类型
+            字符串    string
+             哈希hash   map
+              列表  linkerlist  数据可重复
+              集合  set       数据不可重复
+              有序集合  sortedset  不可重复  有顺序
+
+        hash类型：
+        hset key  field value
+                       如： hset myhash username zhangsan
+                            hget myhash username
+                            hgetall myhash
+         hdel key field
+                    如  hset myhash username
+
+         list类型：
+            命令：lpush key value
+             如： lpush mylist "a"  左边加
+                  lpush mylist "b"
+                  rpush mylist "c"   右边加
+                  lrange mylist start end  查看所有范围
+                  lrange mylist 0 -1
+                  lpop mylist   删除最左边
+                  rpop  mylist      删除最右边
+            set
+                sadd key value
+                sremember key   获取key集合
+                srem key value 删除
+
+            sortedset
+                zadd key score value
+                zrange key score value
+                zrem key value
+
+            通用命令
+                    key * 所有建
+                    type key 类型
+                    del key 删除
+
+
+             持久化
+                RDB           命令：
+                        当前目录打开cmd
+                                 redis-server.exe redis.windows.conf
+                   AOF
+                        appendonly on
+
+            java 操作redis
+                jar包:
+                       common-pool
+                       jedis
+
+                代码思路：
+                new Jedis 对象（地址， 端口） 空参默认localhost 6379
+                    jedis 实现类调用set(key,value)
+                    jedis 关闭
+
+                方法：
+                      设置自动过期时间
+                        setex(key,时间，value)
+
+              jedisPool连接池
+                    思路：
+                        jedispoolconfig 对象  设置redis 的配置
+                        jedispool 对象 可以传jedispoolconfig 实现类, 地址， 端口号
+                         jedispool实现类 调用getresource
+                         然后设置值
+                            最后归还链接池
+
+
+               JedisPoolUtil思路
+
+               1，定义一个getRedis方法 返回Redis对象
+               2，在类加载之前  写入static{}中
+                    进行驱动的加载，
+                    2.1  首先 加载properties文件   用  类class.getclassloader.getresourceAsstream(文件名称)
+                    2.2  申明一个properties对象    调用load读取配置
+                    2.3  创建一个jedispoolconfig 对象   调用set方法  将properties属性传过去   调用properties.getproperties(属性名)
+                    2.4  创建一个Jedispool对象  传入config，host,port
+                    2.5  初始化jedispool 实例
+
+                3.用jedisutil 调用 getjedis 方法 返回JedisPool 对象实例
+                4.用jedispool实例调用set(key,value)
+                5.jedispool调用close  归还连接池
+
+
+           Jedis 练习
+
+            创建一个web java 企业级项目  配置tomcat
+                在webinfo下创建 lib  加入jar包  添加js包
+                创建目录     domain
+                            dao  daoimpl
+                            service serviceimpl
+                            web下 servlet
+                            utils
+
+                添加jedis，druid配置文件
+
+                1 首先创建dao接口 返回list对象接口
+                        实现dao接口对象
+                        复写dao方法
+                        创建druid templetepool 连接池  将druid资源链接传入
+                        调用链接接口的query方法  参数（sql,new beanproperptrowmapper<对象>（对象.class）） 返回list
+                2  service层
+                        创建到接口实列   调用到接口方法  返回list
+                       创建jedispool对象 传入资源池 getredis  返回String数据
+                       判断数据是不是null或者length（） == 0
+                       是的话 需要写入：
+                                    创建list集合
+                                    调用dao实例方法  返回list集合
+                                    将list集合序列化   (new  objectmapper())  传入list  返回json
+                                    将json赋值给String 对象
+                                    然后设置jedis的键值对（key,value）
+                                    归还jedis连接池
+
+                        否：
+                        。。。。。
+                  3 servlet
+                        创建serviceimpl 实例  调用方法  返回json
+                        然后 设置响应头 response。setContentType ("application/json;utf-8")
+                        最后调用response.getWrite().write() 方法 传入json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
