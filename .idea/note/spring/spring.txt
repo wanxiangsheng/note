@@ -44,7 +44,7 @@ spring:
                                         request
                                         session
                                         global-session
-                       生命周期
+                       生命周期     <init-method>  <destroy-method>
                                  单例  出生     容器产生
                                        活着  容器在 就在
                                        死亡  容器销毁 就没了
@@ -54,8 +54,103 @@ spring:
                                         死亡    对象长时间不用 没有别的引用对象，由垃圾回收器收回
                     有默认构造函数 就不能有bean的反射创建对象了
                             需要用 <bean>
-                                        construct-arg  参数类型有 type( 如 java.lang.String )  value name ref  index
-                                    <construct-arg > </construct-arg>
+                                        constructor-arg  参数类型有 type( 如 java.lang.String )  value name ref  index
+                                    <constructor-arg > </constructor-arg>
                                     如果值是时间类型 需要用ref引入  <bean id= ...  class = java.util.Date>
                                     </bean>
+                     set方法注入
+                               若是没有构造方法 也不能用
+                            <bean id = ...bean对象名称  class = cn.......>
+                                   <property name=  构造方法的名称属性 value 赋值 >
+                                              ref标签取Date 对象的值
+                                    </property
+                            </bean>
+                     复杂类型的注入   同样是set方法注入
+                            String[] List Set Map properties
+                               结构相同 可以互换标签
+                                        <list> <set> <array>       <map>  <prop>
+               用注解跟配置的方式：
+                        将 beans  中   引入content 约束  开启  content 包扫描
+                          在要创建的对象上  @component（ id 名称） 如果不写id  默认是类名首字母小写
+                    有4个注解： Component  Controller Service  Repository
+                            如果没有三层 就直接用Component
+                    注解赋值
+                            @Autowired   会根据数据类型自动查找实现类  匹配赋值  数据类型必须只有唯一一个bean
+                                    如果有多个类型 会按照变量名称赋值
+                                  首先还要确保数据类型要被注入 注入的名称要跟变量名称相匹配
+                            @Qualifier
+                                    必须要跟AutoWired 结合使用   可以指定变量类型
+                                      但只能赋值bean类型的数据
+                             @Resource
+                                    可以指定bean 的 id  属性是name  如 name = accountDao
+
+                            @Value
+                                    可以赋值基本数据类型 和String类型  String类型 可以用spel表达式
+                                        如${表达式}
+                             @Scope    取值  singleton prototype
+                                    需要在实现类上加取值范围
+                              @ProDestroy  销毁
+                              @PostConstruct 初始化
+                   用注解去除配置bean的xml文件
+                        @Configration    作用  在spring容器创建时  指定是一个配置文件
+                        @ComponentScans   指定要扫描的包    字段 有basePackage  value
+                            创建方法  creatQueryRunner 方法 传去DataSource   可以将Scope 改为prototype
+                                     createDataSource
+                        @Bean(name = runner)  可以将方法放入spring容器中  并且取一个方法名
+                        @Bean(name = dataSource)  可以将方法放入spring容器中  dataSource 有Autowired作用  自动给runner 中的dataSource赋值
+                         接下来 可以将bean.xml删除   测试类的时候  调用ApplicationContent的子类AnnotationConfigApplicationContext 传入配置类的字节码
+                  如果不想要@Configration注解  可以在 调用ApplicationContent的子类传入字节码
+                    但是 如果有多个配置类  传入多个字节码时  需要扫描配置类的包
+                    如果不想扫描包 可以 在@configration 下  加入 @import 配置类的字节码
+                    对于jdbcConfig.properties 文件 一定要加入jdbc.driver  否则会出现乱码问题
+                       @qualifier  参数可以给方法参数赋值时  不用@AutoWired  指定数据源
+                  spring 跟junit整合
+                            首先导入spring-junit包
+                          用@RunWith(SpringJunitClassRunner.class)  替换junit中的runner 运行器
+                          再用@ContentConfiguration  告知spring运行的 配置时xml  还是注解
+                            如果时xml  则 用属性classes = SpringConfiguration.class
+                            如果时  注解  则用  locations = "classpath:bean.xml"
+
+                   转账案例
+                          获取资源池连接  要开启事务  必须要同一个连接   创建ConnectionUtils
+                                用ThreadLocal  类  获取当前连接   创建getTheadLoaclConnection方法
+                                        从数据源也就是datasource中获取连接  判断当前连接如果为空 就创建连接
+                                        并且绑定当前Thread
+                                        返回
+                                创建一个事务  有4个方法  开启事务  提交事务 回滚事务 关闭事务
+                                    定义一个连接Utils 类 等spring容器注入
+                     动态代理                                       字节码                字节码数组                 增强的代码
+                            用到Proxy类中的方法newProxyInstance(对象。getclass.getloader,对象。get.class.getInterfaces,new InvokeHandler(
+                                    invoke 方法中传入的3个参数
+                                    第一个 返回的对象
+                                    第二个  方法
+                                    第三个 传入的参数
+                                    调用method.invoke(  对象引用 ,  参数处理)
+                                    最后return 对象
+                            ))
+                            匿名对象想要调用外部方法  需要用最终修饰 final
+                      将返回值返回  类型强转  调用方法    代理方法的好处就是随用随创建
+                      如果类没有实现接口 那么这个代理将无法使用
+                      可以使用cglib包 中的类Enhancer中的create方法 创建代理对象  里面两个参数 对象。getclass, MethodIntercepetor
+                     aop
+                            1 连接点跟切入点   所有的切入点都是连接点  就是被增强的方法  反之 不同
+                            2  通知/增强     前置通知  后置通知 异常通知  最终通知  invoke就是环绕通知
+                            当spring检测到切入点方法被执行 就会调用代理对象  根据通知类型 织入
+                       配置aop
+                            <aop:config>
+                                    <aop:aspect id =  ref>
+                                            <aop:before method =  pointcut = execution(通配符)
+                            通配符  * *..*.*(..)
+                            配置切面  约束  需要将切面表达式放前面  然后引入
+                            ProceedingJoinPoint 类型   有getArgs方法 得到参数
+                            在由类型调用。proceed(args)  这个就是环绕通知  配置切入点
+
+
+
+
+
+
+
+
+
 
