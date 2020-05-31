@@ -1,0 +1,165 @@
+1. 跳转小工具
+ALT+1/2...，ESC回到代码区域
+
+2. 无处不在的跳转
+项目间的跳转：CTRL+ALT+[/]
+文件间的跳转：
+命令帮助：CTRL+SHIFT+A
+最近的文件列表：CTRL+E
+最近变化的文件列表：CTRL+SHIFT+E
+浏览修改位置跳转：
+上一次编辑位置：CTRL+SHIFT+BACKSPACE
+回到上一个位置:CTRL+ALT+←
+回到下一个位置：CTRL+ALT+→
+利用书签进行跳转：
+打书签：F11 CTRL+F11
+跳转书签：CTRL+1/2...
+收藏位置和文件：
+添加到Favortite(类和函数):ALT+SHIFT+F
+字符跳转插件emacsIdea跳转：自定义
+编辑器和文件区跳转：ALT+1 ESC
+3. 精准搜索
+类：CTRL+N
+文件：CTRL+SHIFT+N
+符号：CTRL+SHIFT+ALT+N
+字符串：CTRL+SHIFT+F
+4. 列操作：
+选中文件中所有相同的地方：CTRL+SHIFT+ALT+J
+改变大小写：CTRL+SHIFT+U
+快速定位编辑器错误：F2
+5. live template
+main
+psfi,psfs
+pi(c),ps(c)
+6. postfix
+for 100.fori
+sout
+name.field
+user.return
+user.nn(user!=null)
+user.null(user==null)
+7. ALT+ENTER智能提示，代码优化
+自动创建函数
+list replace
+字符串format或者builder
+实现接口（在接口上按住直接新建一个实现类）
+单词拼写
+导包
+8. 重构
+重构变量 SHIFT+F6
+重构方法 CTRL+F6或者添加了参数后使用ALT+ENTER
+9. 抽取
+抽取变量CTRL+ALT+V
+抽取静态常量CTRL+ALT+C
+抽取成员变量CTRL+ALT+F
+抽取成方法参数CTRL+ALT+P
+抽取函数CTRL+ALT+M（函数多个逻辑分别抽取成多个函数）
+10. git的集成
+annotate
+查找代码所有改动之处 CTRL+SHIFT+ALT+↑/↓
+撤销，包括单个和项目改动之处CTRL+ALT+Z
+11. local history
+show history
+put label(类似svn的commit)
+12. 与spring的关联：配置facts
+13. 与数据库的关联:使用idea创建数据库视图
+14. 断点调试
+添加断点CTRL+F8
+单步运行F8
+resumeF9
+查看所有断点CTRL+SHIFT+F8
+禁止所有断点：Mute Breakpoints
+条件断点：在断点上CTRL+SHIFT+F8
+表达式求值ALT+F8
+运行到指定行ALT+F9
+setValue：在调试窗口上面的变量直接按F2
+15. 运行程序
+运行当前上下文CTRL+ALT+F9
+运行已运行过的SHIFT+ALT+F9
+编辑当前运行上下文
+16. 文件操作
+当前文件夹下新建文件CTRL+ALT+INSERT
+当前文件夹下复制当前文件F5
+移动文件F6
+17. 文本操作
+复制简单文件名CTRL+C
+复制完整文件目录CTRL+SHIFT+C
+批量复制，剪切板工具CTRL+SHIFT+V
+18. 结构图
+查看当前field,method大纲CTRL+F12
+查看maven大纲或类图大纲CTRL+ALT+SHIFT+U
+查看类继承结构，方法调用层次CTRL+H CTRL+ALT+H
+2. 常用快捷键
+2.1 查找相关
+双击shift
+在项目的所有目录查找，就是你想看到你不想看到的和你没想过你能看到的都给你找出来
+
+ctrl+f
+当前文件查找特定内容
+
+ctrl+shift+f
+当前项目查找包含特定内容的文件
+
+ctrl+n
+查找类
+
+ctrl+shift+n
+查找文件
+
+ctrl+e
+最近的文件
+
+alt+F7
+非常非常频繁使用的一个快捷键，可以帮你找到你的函数或者变量或者类的所有引用到的地方
+
+ctrl+F12
+查找该类的所有方法和字段
+
+2.2 编辑相关
+shift+enter
+另起一行
+
+ctrl+r
+当前文件替换特定内容
+
+ctrl+shift+r
+当前项目替换特定内容
+
+shift+F6
+非常非常省心省力的一个快捷键，可以重命名你的类、方法、变量等等，而且这个重命名甚至可以选择替换掉注释中的内容
+
+ctrl+d
+复制当前行到下一行
+
+ctrl+x
+剪切当前行
+
+ctrl+c \ ctrl+v
+大家都懂的
+
+ctrl+z
+撤销
+
+ctrl+shift+z
+取消撤销
+
+ctrl+k
+提交代码到SVN
+
+ctrl+t
+更新代码
+
+alt+insert
+可以自动生成构造器、getter/setter等等常用方法
+
+alt+enter
+自动修复
+
+ctrl+alt+L
+格式化
+
+ctrl+w
+选定单词
+
+ctrl+alt+t
+选定代码块之后进行相关操作，如try代码块等。。
